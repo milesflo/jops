@@ -10,10 +10,11 @@ import (
 	"github.com/milesflo/jops/internal/types"
 )
 
-type Input struct {
+type Input interface {
+	Read() ([]types.JobListing, error)
 }
 
-func (i Input) Read() {}
+// func (i Input) Read() {}
 
 var LoadStatusMap = map[string]types.Status{
 	"Applied":             types.StatusApplied,

@@ -4,8 +4,8 @@ import (
 	"github.com/milesflo/jops/internal/types"
 )
 
-type Output struct {
-	Write ([]types.JobListing)
+type Output interface {
+	Write([]types.JobListing) error
 }
 
 var StoreStatusMap = map[types.Status]string{

@@ -3,17 +3,15 @@ package process
 import (
 	"errors"
 
+	"github.com/milesflo/jops/internal/readers"
 	"github.com/milesflo/jops/internal/types"
+	"github.com/milesflo/jops/internal/writers"
 )
 
 type Process struct {
+	readers.Input
+	writers.Output
 	Listings []types.JobListing
-	Input    interface {
-		Read() ([]types.JobListing, error)
-	}
-	Output interface {
-		Write([]types.JobListing) error
-	}
 }
 
 func (p *Process) Load() error {
