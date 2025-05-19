@@ -56,7 +56,7 @@ func (j JobListing) GetStatus() Status {
 
 	// If no interviews occurred, and applied date is over 30 days, you're ghosted.
 	if len(j.Interviews) == 0 && now.Compare(j.AppliedDate.AddDate(0, 0, 30)) < 0 {
-
+		return StatusGhosted
 	}
 
 	if !j.RejectionDate.IsZero() {
