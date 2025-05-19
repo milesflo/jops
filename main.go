@@ -1,6 +1,8 @@
 package main
 
-import "os"
+import (
+	"os"
+)
 
 func must(err error) {
 	if err != nil {
@@ -10,7 +12,14 @@ func must(err error) {
 
 func main() {
 	filepath := os.Args[1]
-	f, err := os.ReadFile(filepath)
+
+	process := Process{}
+	process.Input = CSVInput{Input{}, filepath}
+	process.Output = TerminalOutput{}
+
+	output, err := process.Input.Read()
 	must(err)
-	print(string(f))
+	process.Listings = output
+
+	process.Output.Write(process.Listings)
 }
