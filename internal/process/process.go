@@ -1,6 +1,8 @@
 package process
 
-import "github.com/milesflo/jops/internal/types"
+import (
+	"github.com/milesflo/jops/internal/types"
+)
 
 type Process struct {
 	Listings []types.JobListing
@@ -12,7 +14,7 @@ type Process struct {
 	}
 }
 
-func (p Process) Load() error {
+func (p *Process) Load() error {
 	output, err := p.Input.Read()
 	p.Listings = output
 	return err
