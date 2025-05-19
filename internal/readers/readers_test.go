@@ -1,4 +1,4 @@
-package main
+package readers
 
 import (
 	"strings"
@@ -6,19 +6,23 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+
+	"github.com/milesflo/jops/internal/types"
 )
 
 func TestParseRecord(t *testing.T) {
 	date, err := time.Parse("1/2/06", "03/24/25")
-	must(err)
+	if err != nil {
+		t.Fatal("Static test fixture failed to parse")
+	}
 	tcs := []struct {
 		lineText []string
-		expected JobListing
+		expected types.JobListing
 	}{
 		{
 			lineText: strings.Split("Wikrosoft	Software Engineer	https://wikrosoft.example	$300K - $320K	San Francisco	Applied	03/24/25	", "\t"),
-			expected: JobListing{
-				Company: Company{
+			expected: types.JobListing{
+				Company: types.Company{
 					Name: "Wikrosoft",
 				},
 				JobName:      "Software Engineer",
@@ -34,7 +38,9 @@ func TestParseRecord(t *testing.T) {
 
 	for _, tc := range tcs {
 		res, err := parseCSVRow(tc.lineText)
-		must(err)
+		if err != nil {
+			t.Error("Failed to parse row:", tc.lineText)
+		}
 
 		if diff := cmp.Diff(res, tc.expected); diff != "" {
 			t.Errorf("Structs are not equal: %s", diff)
