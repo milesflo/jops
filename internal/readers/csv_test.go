@@ -10,7 +10,7 @@ import (
 )
 
 func TestParseRecord(t *testing.T) {
-	date, err := time.Parse("1/2/06", "03/24/25")
+	date, err := time.Parse(types.DatestampLayout, "03/24/25")
 	if err != nil {
 		t.Fatal("Static test fixture failed to parse")
 	}
