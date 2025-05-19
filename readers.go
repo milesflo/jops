@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"fmt"
 	"math"
 	"os"
 	"strconv"
@@ -79,6 +80,10 @@ func parsePayrange(payString string) ([2]uint32, error) {
 }
 
 func parseCSVRow(row []string) (JobListing, error) {
+	// TODO: I just decided this is bunk. You should need an index
+	//       argument to specify which header(s), if any, is in the file,
+	//       and access those positions in the row.
+
 	Company := Company{Name: row[0]}
 	JobName := row[1]
 	Link := row[2]
@@ -128,6 +133,9 @@ func (s CSVInput) Read() ([]JobListing, error) {
 	defer f.Close()
 	csvReader := csv.NewReader(f)
 
+	_, err = csvReader.Read()
+	must(err)
+
 	records, err := csvReader.ReadAll()
 	if err != nil {
 		return nil, err
@@ -136,7 +144,17 @@ func (s CSVInput) Read() ([]JobListing, error) {
 	var listings []JobListing
 
 	for _, line := range records {
-		joblisting, _ := parseCSVRow(line)
+		if len(line) == 1 {
+			line = strings.Split(line[0], "\t")
+		}
+		fmt.Println(line)
+		if len(line) < 3 {
+			continue
+		}
+		joblisting, err := parseCSVRow(line)
+		if err != nil {
+			fmt.Println("Bad line found:", err)
+		}
 		listings = append(listings, joblisting)
 	}
 
