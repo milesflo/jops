@@ -17,9 +17,8 @@ func main() {
 	process.Input = CSVInput{Input{}, filepath}
 	process.Output = TerminalOutput{}
 
-	output, err := process.Input.Read()
+	err := process.Load()
 	must(err)
-	process.Listings = output
 
 	process.Output.Write(process.Listings)
 }

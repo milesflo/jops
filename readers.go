@@ -21,6 +21,26 @@ type CSVInput struct {
 
 const DatestampLayout = "01/02/06"
 
+var loadStatusMap = map[string]Status{
+	"Applied":             StatusApplied,
+	"First Call Pending":  StatusFirstCallPending,
+	"First Call Complete": StatusFirstCallComplete,
+	"Ghosted":             StatusGhosted,
+	"Listing Removed":     StatusListingRemoved,
+	"Rejected":            StatusRejected,
+}
+
+// loadStatus converts a saved Status string to an enum
+func loadStatus(statusStr string) Status {
+	value, ok := loadStatusMap[statusStr]
+
+	// No ternary operator in go? Cool, cool....
+	if ok {
+		return value
+	}
+	return StatusPending
+}
+
 func parseDate(datestamp string) time.Time {
 	res, err := time.Parse(DatestampLayout, datestamp)
 	must(err)
@@ -59,25 +79,20 @@ func parsePayrange(payString string) ([2]uint32, error) {
 }
 
 func parseCSVRow(row []string) (JobListing, error) {
-	company := Company{Name: row[0]}
-	jobname := row[1]
-	link := row[2]
+	Company := Company{Name: row[0]}
+	JobName := row[1]
+	Link := row[2]
+	// TODO
+	Description := ""
 	payinfo, err := parsePayrange(row[3])
 	if err != nil {
 		return JobListing{}, err
 	}
-
+	PaybandFloor := payinfo[0]
+	PaybandCeil := payinfo[1]
 	Location := row[4]
-	// Status := row[5]
+	Status := loadStatus(row[5])
 	AppliedDate := parseDate(row[6])
-	// Call1Date := ""
-	// if len(row) > 7 {
-	// 	Call1Date = row[7]
-	// }
-	// Call2Date := ""
-	// if len(row) > 8 {
-	// 	Call2Date = row[8]
-	// }
 	var OfferDate time.Time
 	if len(row) > 9 {
 		OfferDate = parseDate(row[9])
@@ -86,17 +101,21 @@ func parseCSVRow(row []string) (JobListing, error) {
 	if len(row) > 10 {
 		RejectionDate = parseDate(row[10])
 	}
+	// TODO
+	Interviews := []Interview{}
 	return JobListing{
-		Company:       company,
-		JobName:       jobname,
-		Link:          link,
-		PaybandFloor:  payinfo[0],
-		PaybandCeil:   payinfo[1],
-		Location:      Location,
-		Status:        StatusApplied,
-		AppliedDate:   AppliedDate,
-		OfferDate:     OfferDate,
-		RejectionDate: RejectionDate,
+		Company,
+		JobName,
+		Link,
+		Description,
+		PaybandFloor,
+		PaybandCeil,
+		Location,
+		Status,
+		Interviews,
+		AppliedDate,
+		OfferDate,
+		RejectionDate,
 	}, nil
 }
 

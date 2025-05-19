@@ -15,15 +15,15 @@ const (
 )
 
 type JobListing struct {
-	Company      Company
-	JobName      string
-	Link         string
-	Description  string
-	PaybandFloor uint32
-	PaybandCeil  uint32
-	Location     string
-	Status       Status
-	// Interviews    []Interview
+	Company       Company
+	JobName       string
+	Link          string
+	Description   string
+	PaybandFloor  uint32
+	PaybandCeil   uint32
+	Location      string
+	Status        Status
+	Interviews    []Interview
 	AppliedDate   time.Time
 	OfferDate     time.Time
 	RejectionDate time.Time
@@ -51,4 +51,14 @@ type Process struct {
 	Output interface {
 		Write([]JobListing) error
 	}
+}
+
+func (p Process) Load() error {
+	output, err := p.Input.Read()
+	p.Listings = output
+	return err
+}
+
+func (p Process) Write() error {
+	return p.Output.Write(p.Listings)
 }

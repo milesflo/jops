@@ -42,3 +42,23 @@ func (t CSVOutput) Write(listings []JobListing) error {
 	f.Close()
 	return nil
 }
+
+var storeStatusMap = map[Status]string{
+	StatusApplied:           "Applied",
+	StatusFirstCallPending:  "First Call Pending",
+	StatusFirstCallComplete: "First Call Complete",
+	StatusGhosted:           "Ghosted",
+	StatusListingRemoved:    "Listing Removed",
+	StatusRejected:          "Rejected",
+}
+
+// storeStatus converts a Status value to a string for file storage
+func storeStatus(status Status) string {
+	value, ok := storeStatusMap[status]
+
+	// No ternary operator in go? Cool, cool....
+	if ok {
+		return value
+	}
+	return ""
+}
