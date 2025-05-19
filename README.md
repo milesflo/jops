@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-# jops
-An enrichment tool for the job search
-=======
 # Jops
 
-Or, Job-Ops. I'm a sucker for wordplay.
+Or, Job-Ops.
 
 ## Who This Is For
 
@@ -19,4 +15,3 @@ Create a simple Spreadsheet. Call it whatever you want.
 ```sh
 go run . ./test/test.csv
 ```
->>>>>>> 94c5ae1 (Added support for CSV reading)
