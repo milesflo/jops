@@ -11,7 +11,7 @@ func TestQuery(t *testing.T) {
 	tcs := []struct {
 		name     string
 		listings []types.JobListing
-		query    types.JobListing
+		query    types.JobQuery
 		expected []types.JobListing
 		pageSize int
 	}{
@@ -34,7 +34,7 @@ func TestQuery(t *testing.T) {
 					},
 				},
 			},
-			query: types.JobListing{
+			query: types.JobQuery{
 				Company: types.Company{
 					Name: "Wikiwho",
 				},
@@ -71,7 +71,7 @@ func TestQuery(t *testing.T) {
 					JobName: "Software Engineer",
 				},
 			},
-			query: types.JobListing{
+			query: types.JobQuery{
 				Company: types.Company{
 					Name: "Wikiwho",
 				},

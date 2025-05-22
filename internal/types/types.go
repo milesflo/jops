@@ -16,6 +16,13 @@ const (
 	StatusRejected
 )
 
+type JobQuery struct {
+	Company  Company
+	JobName  string
+	Location string
+	Status   Status
+}
+
 type JobListing struct {
 	Company       Company
 	JobName       string
